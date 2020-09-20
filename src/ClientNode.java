@@ -58,13 +58,15 @@ public class ClientNode
         DataOutputStream out = new DataOutputStream(sendingSocket.getOutputStream());
         BufferedReader inFromServer = new BufferedReader(new InputStreamReader(sendingSocket.getInputStream()));
 
-        out.writeBytes("lookupKey/" + message + "\n");
+        out.writeUTF("lookupKey/" + message + "\n");
 
         String result = inFromServer.readLine();
+        System.out.println(result);
         String[] token = result.split("/");
         if (!result.equals("No Word Found!"))
             System.out.println("Lookup result: the meaning is <" + token[1] + "> found in Node " + token[0]);
         else System.out.println(result);
+        out.flush();
         out.close();
         inFromServer.close();
         sendingSocket.close(); 
@@ -75,10 +77,11 @@ public class ClientNode
         DataOutputStream out = new DataOutputStream(sendingSocket.getOutputStream());
         BufferedReader inFromServer = new BufferedReader(new InputStreamReader(sendingSocket.getInputStream()));
 
-        out.writeBytes("tryInsert/" + message + "\n");
+        out.writeUTF("tryInsert/" + message + "\n");
 
         String result = inFromServer.readLine();
         System.out.println(result);
+        out.flush();
         out.close();
         inFromServer.close();
         sendingSocket.close(); 
@@ -135,13 +138,13 @@ public class ClientNode
         if (System.getSecurityManager() == null)
         {
             System.setSecurityManager
-                (new RMISecurityManager());
+                (new SecurityManager());
         }
 
         // Call registry for PowerService
         service = (SuperNodeDef) Naming.lookup("rmi://" + args[0] + "/SuperNodeDef");
 
-        DataInputStream din = new DataInputStream (System.in);
+        Scanner din = new Scanner (System.in);
 
         int initSample = 0;
 
@@ -157,7 +160,7 @@ public class ClientNode
 
             System.out.print ("Choice : ");
 
-            String line = din.readLine();
+            String line = din.next();
 
             if (line.equals("1")) {
                 readSampleWords();
@@ -166,7 +169,7 @@ public class ClientNode
             }
             else if (line.equals("2")) {
                 System.out.print ("Lookup for this word: ");
-                String wordLookup = din.readLine();
+                String wordLookup = din.next();
 
 
                 MessageDigest md2 = MessageDigest.getInstance("SHA1");
@@ -186,7 +189,7 @@ public class ClientNode
             }
             else if (line.equals("3")) {
                 System.out.print ("Tell me the word you want to insert: ");
-                String wordInput = din.readLine();					
+                String wordInput = din.next();					
 
                 MessageDigest md3 = MessageDigest.getInstance("SHA1");
                 md3.reset();
@@ -197,7 +200,7 @@ public class ClientNode
 
                 System.out.println("Hashed key: " + key3);
                 System.out.print ("Tell me the meaning of this word: ");
-                String meaningInput = din.readLine();
+                String meaningInput = din.next();
 
                 // Call remote method
                 String response3 = service.getRandomNode();

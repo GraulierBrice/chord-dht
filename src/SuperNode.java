@@ -141,7 +141,7 @@ public class SuperNode extends UnicastRemoteObject implements SuperNodeDef
         // Assign a security manager, in the event that dynamic
         // classes are loaded
         if (System.getSecurityManager() == null)
-            System.setSecurityManager ( new RMISecurityManager() );
+            System.setSecurityManager ( new SecurityManager() );
 
         busy = 0;
 

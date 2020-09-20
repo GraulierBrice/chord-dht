@@ -56,7 +56,7 @@ public class NodeDHT implements Runnable //extends UnicastRemoteObject implement
         // Assign security manager
         if (System.getSecurityManager() == null)
         {
-            System.setSecurityManager(new RMISecurityManager());
+            System.setSecurityManager(new SecurityManager());
         }
 
         InetAddress myIP = InetAddress.getLocalHost();

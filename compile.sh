@@ -1,6 +1,6 @@
 rm -fr bin/*
 
-javac -cp bin -d bin src/*.java
+javac -cp bin -d bin src/*.java -Xlint:deprecation
 
 
 #java -Djava.security.policy=src/java/policyfile.txt PowerServiceServer
